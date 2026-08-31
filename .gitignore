@@ -1,0 +1,19 @@
+# Secrets and credentials
+*.key
+*.pem
+porkbun.ini
+.env
+
+# Real config files (only .example versions are versioned)
+wg0.conf
+01-netcfg.yaml
+sshd_config
+
+# System
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
