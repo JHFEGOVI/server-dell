@@ -38,20 +38,6 @@ server-dell/
 └── README.md
 ```
 
-## Architecture Decision Records
-
-| ADR | Title |
-|-----|-------|
-| [ADR-001](docs/decisions/ADR-001.md) | SSL termination at VPS level |
-| [ADR-002](docs/decisions/ADR-002.md) | Manual Nginx over Nginx Proxy Manager |
-| [ADR-003](docs/decisions/ADR-003.md) | Separate Docker Compose stacks per service |
-| [ADR-004](docs/decisions/ADR-004.md) | Shared proxy-network Docker network |
-| [ADR-005](docs/decisions/ADR-005.md) | Isolated monitoring-internal Docker network |
-| [ADR-006](docs/decisions/ADR-006.md) | No host-exposed ports on monitoring stack |
-| [ADR-007](docs/decisions/ADR-007.md) | SSH public key authentication only |
-| [ADR-008](docs/decisions/ADR-008.md) | HTTP basic auth for admin tools |
-| [ADR-009](docs/decisions/ADR-009.md) | PasswordAuthentication override in 50-cloud-init.conf |
-
 ## Security Notes
 
 This repository contains **no secrets, credentials, or private keys**.
