@@ -40,17 +40,27 @@ server-dell/
 
 ## Architecture Decision Records
 
-| ADR | Title |
-|-----|-------|
-| [ADR-001](docs/decisions/ADR-001.md) | SSH public key authentication only |
-| [ADR-002](docs/decisions/ADR-002.md) | SSL termination at VPS level |
-| [ADR-003](docs/decisions/ADR-003.md) | Manual Nginx over Nginx Proxy Manager |
-| [ADR-004](docs/decisions/ADR-004.md) | Separate Docker Compose stacks per service |
-| [ADR-005](docs/decisions/ADR-005.md) | Shared proxy-network Docker network |
-| [ADR-006](docs/decisions/ADR-006.md) | Isolated monitoring-internal Docker network |
-| [ADR-007](docs/decisions/ADR-007.md) | No host-exposed ports on monitoring stack |
-| [ADR-008](docs/decisions/ADR-008.md) | HTTP basic auth for admin tools |
-| [ADR-009](docs/decisions/ADR-009.md) | PasswordAuthentication override in 50-cloud-init.conf |
+All decision records are available in [`docs/decisions/`](docs/decisions/).
+
+### Security & Access
+- [ADR-001](docs/decisions/ADR-001.md) — SSH public key authentication only
+- [ADR-008](docs/decisions/ADR-008.md) — HTTP basic auth for admin tools
+- [ADR-009](docs/decisions/ADR-009.md) — PasswordAuthentication override in 50-cloud-init.conf
+
+### Networking
+- [ADR-002](docs/decisions/ADR-002.md) — SSL termination at VPS level
+- [ADR-005](docs/decisions/ADR-005.md) — Shared proxy-network Docker network
+
+### Infrastructure & Docker
+- [ADR-003](docs/decisions/ADR-003.md) — Manual Nginx over Nginx Proxy Manager
+- [ADR-004](docs/decisions/ADR-004.md) — Separate Docker Compose stacks per service
+
+### Monitoring
+- [ADR-006](docs/decisions/ADR-006.md) — Isolated monitoring-internal Docker network
+- [ADR-007](docs/decisions/ADR-007.md) — No host-exposed ports on monitoring stack
+
+### Services
+_(none yet)_
 
 ## Security Notes
 
