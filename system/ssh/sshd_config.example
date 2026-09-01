@@ -1,0 +1,21 @@
+# This is the sshd server system-wide configuration file.
+# See sshd_config(5) for more information.
+
+Include /etc/ssh/sshd_config.d/*.conf
+
+# Change to a non-default port to reduce automated scanning noise
+Port YOUR_SSH_PORT
+
+PermitRootLogin no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+PasswordAuthentication no
+PermitEmptyPasswords no
+KbdInteractiveAuthentication no
+
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server

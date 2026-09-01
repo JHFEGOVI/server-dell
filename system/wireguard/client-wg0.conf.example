@@ -1,0 +1,13 @@
+# WireGuard configuration for a client node (laptop or desktop)
+# Each client gets its own internal VPN address (10.0.0.2, 10.0.0.3, etc.)
+
+[Interface]
+Address = 10.0.0.YOUR_CLIENT_IP/24
+PrivateKey = YOUR_CLIENT_PRIVATE_KEY
+
+# VPS relay (DigitalOcean)
+[Peer]
+PublicKey = YOUR_VPS_PUBLIC_KEY
+Endpoint = YOUR_VPS_IP:51820
+AllowedIPs = 10.0.0.0/24
+PersistentKeepalive = 25

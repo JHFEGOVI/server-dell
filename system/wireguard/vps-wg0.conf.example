@@ -1,0 +1,30 @@
+# WireGuard configuration for the VPS relay node
+# Internal VPN address: 10.0.0.5
+
+[Interface]
+Address = 10.0.0.5/24
+ListenPort = 51820
+PrivateKey = YOUR_VPS_PRIVATE_KEY
+PostUp = iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT; iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE; ip route add 10.0.0.1/32 dev wg0
+PostDown = iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT; iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE; ip route del 10.0.0.1/32 dev wg0
+
+# Dell server
+[Peer]
+PublicKey = YOUR_SERVER_PUBLIC_KEY
+AllowedIPs = 10.0.0.1/32
+PersistentKeepalive = 25
+
+# ASUS laptop
+[Peer]
+PublicKey = YOUR_ASUS_PUBLIC_KEY
+AllowedIPs = 10.0.0.2/32
+
+# Fedora desktop
+[Peer]
+PublicKey = YOUR_FEDORA_PUBLIC_KEY
+AllowedIPs = 10.0.0.3/32
+
+# Mobile (iOS)
+[Peer]
+PublicKey = YOUR_MOBILE_PUBLIC_KEY
+AllowedIPs = 10.0.0.4/32

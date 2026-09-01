@@ -1,0 +1,11 @@
+# This file is managed by cloud-init on cloud instances.
+# On bare metal installs, cloud-init is inactive and this file will not be regenerated.
+#
+# IMPORTANT: On Ubuntu 24.04, OpenSSH processes Include directives before continuing
+# to parse sshd_config. This means settings in this file take precedence over
+# settings in the main config file, regardless of their position.
+#
+# PasswordAuthentication must be set here to no — setting it only in sshd_config
+# has no effect because this file overrides it.
+
+PasswordAuthentication no

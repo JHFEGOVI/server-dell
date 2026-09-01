@@ -1,0 +1,29 @@
+# WireGuard configuration for the Dell server (hub node)
+# Internal VPN address: 10.0.0.1
+
+[Interface]
+Address = 10.0.0.1/24
+ListenPort = 51820
+PrivateKey = YOUR_SERVER_PRIVATE_KEY
+
+# ASUS laptop
+[Peer]
+PublicKey = YOUR_ASUS_PUBLIC_KEY
+AllowedIPs = 10.0.0.2/32
+
+# Fedora desktop
+[Peer]
+PublicKey = YOUR_FEDORA_PUBLIC_KEY
+AllowedIPs = 10.0.0.3/32
+
+# Mobile (iOS)
+[Peer]
+PublicKey = YOUR_MOBILE_PUBLIC_KEY
+AllowedIPs = 10.0.0.4/32
+
+# VPS relay (DigitalOcean)
+[Peer]
+PublicKey = YOUR_VPS_PUBLIC_KEY
+AllowedIPs = 10.0.0.5/32
+Endpoint = YOUR_VPS_IP:51820
+PersistentKeepalive = 25
