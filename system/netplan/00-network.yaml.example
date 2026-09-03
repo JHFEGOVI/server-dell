@@ -1,0 +1,32 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp7s0:                          # Primary interface (Ethernet)
+      dhcp4: false
+      addresses:
+        - YOUR_STATIC_IP/24
+      routes:
+        - to: default
+          via: YOUR_GATEWAY
+          metric: 100                # Lower metric = higher priority
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+  wifis:
+    wlp6s0:                          # Failover interface (WiFi)
+      dhcp4: false
+      addresses:
+        - YOUR_WIFI_STATIC_IP/24
+      routes:
+        - to: default
+          via: YOUR_GATEWAY
+          metric: 600                # Higher metric = lower priority (failover)
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+      access-points:
+        "YOUR_WIFI_SSID":
+          password: "YOUR_WIFI_PASSWORD"
