@@ -6,14 +6,19 @@ It assumes a fresh **Ubuntu Server 24.04 LTS** installation with:
 - A user with sudo privileges
 - Internet access (ethernet or WiFi)
 - A DigitalOcean account (or equivalent VPS provider)
+- A VPS running Ubuntu Server 24.04 LTS — a 1 vCPU / 512MB RAM instance is sufficient (relay only). Choose a region geographically close to your homelab to minimize tunnel latency.
 - A registered domain and Porkbun API credentials
 - WireGuard-capable clients (laptop, desktop, mobile)
 
 > All configuration file examples are in this repository.
 > Copy the relevant `.example` file, remove the `.example` extension,
 > and replace placeholders with your actual values before applying.
+>
+> **Note:** This repository is a reference, not a deployment tool.
+> Use the `.example` files as a guide to understand the expected structure
+> and create your own configuration files with your actual values.
 
-## 1. Base System
+## 1. Base System [Dell]
 
 ### Network configuration
 
@@ -38,6 +43,9 @@ sudo sysctl -p
 
 ### Firewall (ufw)
 
+> **Note:** Port `2847` is the custom SSH port configured in Section 3.
+> Open it here so access is not lost after SSH hardening is applied.
+
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -47,6 +55,16 @@ sudo ufw enable
 ```
 
 ## 2. WireGuard
+
+### VPN address space
+
+| Node | WireGuard IP |
+|------|-------------|
+| Dell server | 10.0.0.1 |
+| ASUS laptop | 10.0.0.2 |
+| Fedora desktop | 10.0.0.3 |
+| Mobile (iOS) | 10.0.0.4 |
+| VPS relay | 10.0.0.5 |
 
 ### Dell server
 
@@ -115,7 +133,7 @@ sudo apt install qrencode -y
 qrencode -t ansiutf8 < /tmp/mobile.conf
 ```
 
-## 3. SSH Hardening
+## 3. SSH Hardening [Dell]
 
 Generate an ED25519 key pair on each client machine:
 
@@ -150,7 +168,7 @@ In your domain registrar (Porkbun or equivalent):
 - Create an `A` record pointing `*.YOUR_DOMAIN` → VPS public IP (wildcard)
 - Set TTL to 600
 
-## 5. Docker and Stacks
+## 5. Docker and Stacks [Dell]
 
 ### Install Docker
 
@@ -182,6 +200,12 @@ docker compose up -d
 
 Reference: [`docker/proxy/docker-compose.yml`](../docker/proxy/docker-compose.yml)
 
+Create the configuration directory before starting the stack:
+
+```bash
+mkdir -p ~/docker/proxy/conf.d
+```
+
 ```bash
 cd ~/docker/proxy
 cp .env.example .env
@@ -196,6 +220,16 @@ On the VPS, install Certbot and obtain a wildcard certificate via DNS challenge:
 apt install certbot python3-certbot-dns-porkbun -y
 mkdir -p /etc/letsencrypt/secrets
 nano /etc/letsencrypt/secrets/porkbun.ini  # add Porkbun API credentials
+```
+
+The file must contain the following fields:
+
+```
+dns_porkbun_api_key = YOUR_PORKBUN_API_KEY
+dns_porkbun_secret_api_key = YOUR_PORKBUN_SECRET_KEY
+```
+
+```bash
 chmod 600 /etc/letsencrypt/secrets/porkbun.ini
 certbot certonly \
   --authenticator dns-porkbun \
