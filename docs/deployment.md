@@ -1,7 +1,7 @@
 # Deployment Guide
 
 This guide documents how to reproduce this homelab setup from scratch.
-It assumes a fresh **Ubuntu Server 24.04 LTS** installation with:
+It assumes a fresh **Ubuntu Server 24.04 LTS** installation on your local server (this can be a repurposed laptop, desktop, or any x86 machine) with:
 
 - A user with sudo privileges
 - Internet access (ethernet or WiFi)
@@ -18,7 +18,7 @@ It assumes a fresh **Ubuntu Server 24.04 LTS** installation with:
 > Use the `.example` files as a guide to understand the expected structure
 > and create your own configuration files with your actual values.
 
-## 1. Base System [Dell]
+## 1. Base System [Local Server]
 
 ### Network configuration
 
@@ -54,17 +54,17 @@ sudo ufw allow 51820/udp comment 'WireGuard'
 sudo ufw enable
 ```
 
-## 2. WireGuard
+## 2. WireGuard [Local Server + VPS]
 
 ### VPN address space
 
-| Node | WireGuard IP |
-|------|-------------|
-| Dell server | 10.0.0.1 |
-| ASUS laptop | 10.0.0.2 |
-| Fedora desktop | 10.0.0.3 |
-| Mobile (iOS) | 10.0.0.4 |
-| VPS relay | 10.0.0.5 |
+| Node | Role | WireGuard IP |
+|------|------|-------------|
+| Local server | Hub | 10.0.0.1 |
+| Client 1 | Laptop | 10.0.0.2 |
+| Client 2 | Desktop | 10.0.0.3 |
+| Client 3 | Mobile | 10.0.0.4 |
+| VPS | Relay | 10.0.0.5 |
 
 ### Dell server
 
@@ -76,7 +76,7 @@ wg genkey | sudo tee /etc/wireguard/server_private.key | wg pubkey | sudo tee /e
 sudo chmod 600 /etc/wireguard/server_private.key
 ```
 
-Generate a key pair for each client (ASUS, Fedora, mobile):
+Generate a key pair for each client (laptop, desktop, mobile):
 
 ```bash
 wg genkey | sudo tee /etc/wireguard/CLIENT_private.key | wg pubkey | sudo tee /etc/wireguard/CLIENT_public.key
@@ -126,14 +126,14 @@ sudo systemctl enable wg-quick@wg0
 sudo systemctl start wg-quick@wg0
 ```
 
-For mobile (iOS/Android), generate a QR code on the Dell:
+For mobile (iOS/Android), generate a QR code on the local server:
 
 ```bash
 sudo apt install qrencode -y
 qrencode -t ansiutf8 < /tmp/mobile.conf
 ```
 
-## 3. SSH Hardening [Dell]
+## 3. SSH Hardening [Local Server]
 
 Generate an ED25519 key pair on each client machine:
 
@@ -160,7 +160,7 @@ sudo systemctl enable fail2ban
 sudo systemctl start fail2ban
 ```
 
-## 4. DNS Configuration
+## 4. DNS Configuration [Registrar]
 
 In your domain registrar (Porkbun or equivalent):
 
@@ -168,7 +168,7 @@ In your domain registrar (Porkbun or equivalent):
 - Create an `A` record pointing `*.YOUR_DOMAIN` → VPS public IP (wildcard)
 - Set TTL to 600
 
-## 5. Docker and Stacks [Dell]
+## 5. Docker and Stacks [Local Server]
 
 ### Install Docker
 
@@ -212,7 +212,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-## 6. SSL Certificate
+## 6. SSL Certificate [VPS]
 
 On the VPS, install Certbot and obtain a wildcard certificate via DNS challenge:
 
@@ -238,7 +238,7 @@ certbot certonly \
   -d *.YOUR_DOMAIN
 ```
 
-## 7. Nginx
+## 7. Nginx [VPS + Local Server]
 
 ### VPS
 
@@ -249,6 +249,9 @@ ln -s /etc/nginx/sites-available/YOUR_DOMAIN /etc/nginx/sites-enabled/
 nginx -t
 systemctl reload nginx
 ```
+
+> **Note:** The reference file is named after the author's domain (`jhongomez.dev`).
+> Rename it to match your own domain when creating your configuration.
 
 Reference: [`nginx/vps/jhongomez.dev.conf`](../nginx/vps/jhongomez.dev.conf)
 
