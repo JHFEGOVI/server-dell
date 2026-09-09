@@ -16,6 +16,7 @@ network:
           - 1.1.1.1
   wifis:
     wlp6s0:                          # Failover interface (WiFi)
+      optional: true                 # Prevents boot delay if WiFi is unavailable
       dhcp4: false
       addresses:
         - YOUR_WIFI_STATIC_IP/24

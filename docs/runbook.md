@@ -74,9 +74,9 @@ sudo wg set wg0 peer <VPS_PUBLIC_KEY> endpoint 10.0.0.X:51820
 
 ```bash
 # Via local Ethernet IP
-ssh -p YOUR_SSH_PORT user@192.168.0.100
+ssh -p YOUR_SSH_PORT user@YOUR_SERVER_ETHERNET_IP
 # Via local WiFi IP
-ssh -p YOUR_SSH_PORT user@192.168.0.101
+ssh -p YOUR_SSH_PORT user@YOUR_SERVER_WIFI_IP
 # Via DigitalOcean web console if VPS fails
 # cloud.digitalocean.com → Droplets → Console
 ```
@@ -105,6 +105,42 @@ ip addr show
 ```bash
 sudo netplan apply
 ```
+
+### ISP or router change
+
+If the local network range changes (new ISP, new router), SSH will stop responding
+because the server's static IPs no longer match the new network.
+
+1. Identify the new network range from another device:
+
+```bash
+ip route | grep default
+```
+
+2. Access the local server physically (monitor + keyboard) if SSH is unreachable.
+
+3. Update Netplan with the new IPs, gateway, and WiFi SSID if needed:
+
+```bash
+sudo nano /etc/netplan/00-network.yaml
+sudo netplan apply
+```
+
+4. Verify connectivity:
+
+```bash
+ip addr show enp7s0
+ping YOUR_NEW_GATEWAY
+```
+
+5. Verify WireGuard tunnel is still up:
+
+```bash
+sudo wg show
+```
+
+> **Note:** The VPS and domain DNS records do not need to change — only the local
+> network configuration is affected.
 
 ---
 
