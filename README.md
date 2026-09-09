@@ -1,7 +1,8 @@
 # server-dell
 
-Personal homelab server built on a Dell Inspiron 3443 running Ubuntu Server 24.04.
-Documented as a DevOps/sysadmin portfolio project.
+Personal homelab server built on a repurposed Dell Inspiron 3443 running Ubuntu Server 24.04.
+Documented as a DevOps/sysadmin portfolio project — the architecture is designed to work
+on any old x86 machine, not just this specific hardware.
 
 ## Hardware
 
@@ -11,7 +12,12 @@ Documented as a DevOps/sysadmin portfolio project.
 - **Storage:** 256GB SSD
 - **OS:** Ubuntu Server 24.04.04 LTS
 
-## Architecture Overview
+## Architecture
+
+The infrastructure runs on two nodes — a local server behind NAT and a VPS relay —
+connected via a permanent WireGuard tunnel. SSL terminates at the VPS level.
+
+→ [View architecture diagrams](docs/architecture.md)
 
 - **VPN:** WireGuard — self-managed, full tunnel configuration
 - **Reverse proxy:** Nginx — manual configuration, no GUI tools
@@ -26,14 +32,16 @@ Documented as a DevOps/sysadmin portfolio project.
 ```
 server-dell/
 ├── docs/
-│   ├── decisions/     # Architecture Decision Records (ADRs)
-│   └── architecture.md
-├── docker/            # Docker Compose stacks, one directory per service
+│   ├── decisions/       # Architecture Decision Records (ADRs)
+│   ├── architecture.md  # Architecture diagrams
+│   ├── deployment.md    # Fresh install guide
+│   └── runbook.md       # Day-to-day operations
+├── docker/              # Docker Compose stacks, one directory per service
 ├── nginx/
-│   ├── vps/           # Nginx config running on the VPS
-│   └── dell/          # Nginx config running on the server
-├── system/            # System-level configs (.example files only)
-├── scripts/           # Utility scripts
+│   ├── vps/             # Nginx config running on the VPS
+│   └── dell/            # Nginx config running on the local server
+├── system/              # System-level configs (.example files only)
+├── scripts/             # Utility scripts
 ├── .gitignore
 └── README.md
 ```
@@ -61,6 +69,15 @@ All decision records are available in [`docs/decisions/`](docs/decisions/).
 
 ### Services
 _(none yet)_
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](docs/architecture.md) | System diagrams — general topology and Docker networks |
+| [Deployment guide](docs/deployment.md) | Step-by-step fresh install from scratch |
+| [Runbook](docs/runbook.md) | Operational reference for day-to-day tasks |
+| [ADRs](docs/decisions/) | Architecture Decision Records |
 
 ## Security Notes
 
